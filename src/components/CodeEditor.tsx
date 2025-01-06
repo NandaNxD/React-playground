@@ -1,9 +1,10 @@
 import { Editor, Monaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { useRef } from 'react';
-import parser from 'prettier/parser-babel'
+import * as prettier from "prettier/standalone";
+import parserBabel from "prettier/plugins/babel";
+import prettierPluginEstree from "prettier/plugins/estree";
 
-import * as prettier from 'prettier'
 import { BundledLanguage, BundledTheme, createHighlighter, HighlighterGeneric } from "shiki";
 import { shikiToMonaco } from "@shikijs/monaco";
 
@@ -67,14 +68,10 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
 
     const onFormatClick=async()=>{
         const unformatted=getEditorValue();
-
-        console.log(parser);
-        const formatted = await prettier.format(unformatted,{
-            parser: 'babel',
-            plugins: [{languages:[{name:'javascript',parsers:['babel']}],parsers:{
-                'babel':parser.parsers.babel
-            }}],
-            semi: true,
+        
+        const formatted=await prettier.format(unformatted, {
+            parser: "babel",
+            plugins: [parserBabel, prettierPluginEstree],
         });
 
         editorRef.current?.setValue(formatted)
