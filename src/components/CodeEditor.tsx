@@ -83,7 +83,7 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
         <div className='editor-wrapper'>
             <button className='button isPrimary is-small' onClick={onFormatClick}>Format</button>
             <Editor
-                height="30vh"
+                height="50vh"
                 defaultValue={initialValue}
                 defaultLanguage="javascript"
                 theme="vs-dark"

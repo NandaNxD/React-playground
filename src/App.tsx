@@ -7,14 +7,15 @@ import CodeEditor from './components/CodeEditor';
 import { REACT_TEMPLATE } from './templates/REACT_TEMPLATE';
 import { editor } from 'monaco-editor';
 import 'bulmaswatch/cosmo/bulmaswatch.min.css';
+import Preview from './components/Preview';
 
 function App() {
 
-  const [input,setInput]=useState('');
+  const [code,setCode]=useState('');
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  
 
   const startService=async()=>{
 
@@ -39,9 +40,7 @@ function App() {
   },[])
 
   const transpileCode=async(code:string)=>{
-
-    iframeRef.current?.srcdoc!=html;
-    
+ 
     try{
       let result = await esbuild.build({
         entryPoints:['index.js'],
@@ -53,8 +52,8 @@ function App() {
           global:'window'
         }
       });
-
-      iframeRef.current?.contentWindow?.postMessage(result.outputFiles[0].text,'*');
+      
+      setCode(result.outputFiles[0].text);
 
     }
     catch(err){
@@ -63,27 +62,6 @@ function App() {
     
   }
 
-  const html = `
-    <html>
-    <head></head>
-    <body>
-      <div id="root"></div>
-      <script>
-        window.addEventListener('message',(event)=>{
-          try{
-            eval(event.data);
-          }
-          catch(err){
-            console.log(err);
-            document.querySelector('#root').innerHTML='<div style="color:red"><h3>Runtime Error</h3>'+err+'</div>';
-            console.error(err);
-          }
-          
-        },false)
-      </script>
-    </body
-    </html>
-  `;
   
   return (
       <div ref={ref}>
@@ -91,13 +69,9 @@ function App() {
         <CodeEditor onChange={(value: string | undefined, ev: editor.IModelContentChangedEvent):void=>{
           transpileCode(value || '')
         }} initialValue={REACT_TEMPLATE}></CodeEditor> 
-          
-          <iframe
-              srcDoc={html}
-              ref={iframeRef}
-              sandbox="allow-scripts"
-              title="preview"
-          ></iframe>
+        
+        <Preview code={code}></Preview>
+         
       </div>
   );
 }
