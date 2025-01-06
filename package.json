@@ -13,6 +13,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
     "@types/prettier": "^2.7.3",
+    "bulmaswatch": "^0.8.1",
     "esbuild-wasm": "^0.24.2",
     "localforage": "^1.10.0",
     "monaco-editor": "^0.52.2",

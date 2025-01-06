@@ -7,6 +7,7 @@ import prettierPluginEstree from "prettier/plugins/estree";
 
 import { BundledLanguage, BundledTheme, createHighlighter, HighlighterGeneric } from "shiki";
 import { shikiToMonaco } from "@shikijs/monaco";
+import './CodeEditor.css'
 
 
 export interface CodeEditorProps{
@@ -79,8 +80,8 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
     }
 
     return (
-        <div>
-            <button onClick={onFormatClick}>Format</button>
+        <div className='editor-wrapper'>
+            <button className='button isPrimary is-small' onClick={onFormatClick}>Format</button>
             <Editor
                 height="30vh"
                 defaultValue={initialValue}
@@ -90,6 +91,9 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
                     wordWrap: "on",
                     showUnused: false,
                     automaticLayout: true,
+                    minimap:{
+                        enabled:false
+                    }
                 }}
                 onMount={handleEditorDidMount}
                 

@@ -1,0 +1,17 @@
+.editor-wrapper{
+    position: relative;
+    height: 100%;
+}
+
+.editor-wrapper .is-small{
+    position: absolute;
+    top:4px;
+    right: 20px;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.editor-wrapper:hover .is-small{
+    opacity: 1.0;
+}

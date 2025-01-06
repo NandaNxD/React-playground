@@ -6,6 +6,7 @@ import { fetchPlugin } from './plugins/fetch-plugin';
 import CodeEditor from './components/CodeEditor';
 import { REACT_TEMPLATE } from './templates/REACT_TEMPLATE';
 import { editor } from 'monaco-editor';
+import 'bulmaswatch/cosmo/bulmaswatch.min.css';
 
 function App() {
 
