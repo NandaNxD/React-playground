@@ -22,27 +22,8 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
 
     const handleEditorDidMount=async (editor: editor.IStandaloneCodeEditor, monaco: Monaco)=>  {
 
-        // monaco?.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-
-        // monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-        //     noSemanticValidation: true,
-        //     noSyntaxValidation: false,
-        // });
-
-        // monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-        //     target: monaco.languages.typescript.ScriptTarget.ES2016,
-        //     allowNonTsExtensions: true,
-        //     allowJs: true,
-        //     moduleResolution:
-        //         monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-        //     module: monaco.languages.typescript.ModuleKind.ESNext,
-        // });
-
         monaco.languages.register({id:'javascript'});
-        
-
         editorRef.current = editor;
-       
     }
 
     const getEditorValue=()=> {
@@ -60,7 +41,6 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
         const highlighter = await createHighlighter({
             themes: ['vitesse-dark'],
             langs: ["javascript"],
-            // Register the themes from Shiki, and provide syntax highlighting for Monaco.
         });
 
         shikiToMonaco(highlighter,monaco)
