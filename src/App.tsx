@@ -6,28 +6,37 @@ import { REACT_TEMPLATE } from "./templates/REACT_TEMPLATE";
 import { editor } from "monaco-editor";
 import "bulmaswatch/cosmo/bulmaswatch.min.css";
 import Preview from "./components/Preview";
-import bundle from "./bundler";
+import  { Bundler } from "./bundler";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DEBOUNCE_TIME_IN_MS } from "./Constants";
 
 
 function App() {
     const [code, setCode] = useState("");
+    const [err,setErr]=useState<string | null>('');
 
-    const initializeReactApp = async () => {
+    const initializeIframeReactApp = async () => {
       try{
+        await Bundler.initializeBundler()
         await bundleCode(REACT_TEMPLATE);
       }
       catch(err){}
     };
 
     useEffect(() => {
-        (async()=>{await initializeReactApp()})();
+        (async()=>{await initializeIframeReactApp();})();
     }, []);
 
     const bundleCode = async (code: string) => {
-        const transpiledCode = await bundle(code);
-        setCode(transpiledCode || "");
+        const transpiledCode = await Bundler.bundleCode(code);
+
+        if(transpiledCode.error){
+            setErr(transpiledCode.error);
+            return;
+        }
+
+        setErr(null);
+        setCode(transpiledCode.code || "");
     };
 
     const debouncedBundleFunction = useCallback(
@@ -54,7 +63,7 @@ function App() {
             </PanelResizeHandle>
 
             <Panel defaultSize={30} >
-                <Preview code={code}></Preview>
+                <Preview code={code} error={err}></Preview>
             </Panel>
         </PanelGroup>
     );

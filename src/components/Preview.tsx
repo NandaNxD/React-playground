@@ -1,33 +1,15 @@
 import { useEffect, useRef } from 'react';
 import './Preview.css'
+import { HTML_IFRAME_TEMPLATE } from '../templates/HTML_IFRAME_TEMPLATE';
 
 interface PreviewProps{
-    code:string
+    code:string, 
+    error:string | null
 }
 
-const html = `
-    <html>
-    <head></head>
-    <body>
-      <div id="root"></div>
-      <script>
-        window.addEventListener('message',(event)=>{
-          try{
-            eval(event.data);
-          }
-          catch(err){
-            console.log(err);
-            document.querySelector('#root').innerHTML='<div style="color:red"><h3>Runtime Error</h3>'+err+'</div>';
-            console.error(err);
-          }
-          
-        },false)
-      </script>
-    </body
-    </html>
-  `;
+const html = HTML_IFRAME_TEMPLATE;
 
-const Preview = ({code}:PreviewProps) => {
+const Preview = ({code,error}:PreviewProps) => {
 
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -35,22 +17,31 @@ const Preview = ({code}:PreviewProps) => {
         if(!iframeRef.current){
             return;
         }
-        iframeRef.current.srcdoc = html;
         
+        iframeRef.current.srcdoc = html;
+
         setTimeout(()=>{
            iframeRef.current?.contentWindow?.postMessage(code, "*");
         },50);
 
-    },[code])
+    },[code,error])
+
 
     return (
-        <div className='preview-wrapper'>
+        <div className="preview-wrapper">
             <iframe
                 srcDoc={html}
                 ref={iframeRef}
+                className={error ? "hide" : ""}
                 sandbox="allow-scripts"
                 title="preview"
             ></iframe>
+
+            {error && (
+                <div className="preview-error">
+                    <strong>Compile Error</strong> <div>{error}</div>
+                </div>
+            )}
         </div>
     );
 }
