@@ -1,0 +1,12 @@
+.resize-handle{
+    width: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.resize-image{
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    height: 60px;
+    width: 100%;
+}

@@ -1,0 +1,92 @@
+import { languages } from 'monaco-editor'
+
+export const configureMonaco = (monaco: any) => {
+  // Register a new language
+  monaco.languages.register({ id: 'jsx' })
+
+  // Register a tokens provider for the language
+  monaco.languages.setMonarchTokensProvider('jsx', {
+    tokenizer: {
+      root: [
+        [/[a-z_$][\w$]*/, { cases: { '@default': 'identifier' } }],
+        [/<[a-zA-Z_$][\w$]*/, 'tag'],
+        [/\/>/, 'tag'],
+        [/>/, 'tag'],
+        [/=/, 'operator'],
+        [/"([^"\\]|\\.)*$/, 'string.invalid'],
+        [/'([^'\\]|\\.)*$/, 'string.invalid'],
+        [/"/, 'string', '@string."'],
+        [/'/, 'string', "@string.'"],
+        [/{/, { token: 'delimiter.curly', bracket: '@open' }],
+        [/}/, { token: 'delimiter.curly', bracket: '@close' }],
+      ],
+      string: [
+        [/[^\\"']+/, 'string'],
+        [/\\(u[0-9A-Fa-f]{4}|n|t|r|\\|'|\$\{)/, 'string.escape'],
+        [/\\./, 'string.escape.invalid'],
+        [/["']/, { cases: { '$#==$S2': { token: 'string', next: '@pop' }, '@default': 'string' } }],
+      ],
+    },
+  })
+
+  // Define a new theme that contains only rules that match this language
+  monaco.editor.defineTheme('myCoolTheme', {
+    base: 'vs',
+    inherit: false,
+    rules: [
+      { token: 'tag', foreground: '0000FF' },
+      { token: 'identifier', foreground: '000000' },
+      { token: 'string', foreground: 'A31515' },
+    ],
+    colors: {
+      'editor.foreground': '#000000',
+    },
+  })
+
+  // Register a completion item provider for the new language
+  monaco.languages.registerCompletionItemProvider('jsx', {
+    provideCompletionItems: () => {
+      const suggestions = [
+        {
+          label: 'div',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: '<div>$0</div>',
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          documentation: 'A div element',
+        },
+        {
+          label: 'span',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: '<span>$0</span>',
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          documentation: 'A span element',
+        },
+      ]
+      return { suggestions: suggestions }
+    },
+  })
+
+  // Register a hover provider for the new language
+  monaco.languages.registerHoverProvider('jsx', {
+    provideHover: (model: any, position: any) => {
+      const word = model.getWordAtPosition(position)
+      if (word) {
+        if (word.word === 'div') {
+          return {
+            contents: [
+              { value: 'The `<div>` tag defines a division or a section in an HTML document.' },
+            ],
+          }
+        } else if (word.word === 'span') {
+          return {
+            contents: [
+              { value: 'The `<span>` tag is an inline container used to mark up a part of a text, or a part of a document.' },
+            ],
+          }
+        }
+      }
+      return null
+    },
+  })
+}
+

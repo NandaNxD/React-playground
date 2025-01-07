@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
+import './Preview.css'
 
 interface PreviewProps{
     code:string
@@ -34,21 +35,23 @@ const Preview = ({code}:PreviewProps) => {
         if(!iframeRef.current){
             return;
         }
-        iframeRef.current?.srcdoc != html;
+        iframeRef.current.srcdoc = html;
+        
+        setTimeout(()=>{
+           iframeRef.current?.contentWindow?.postMessage(code, "*");
+        },50);
 
-        iframeRef.current?.contentWindow?.postMessage(
-             code,
-             "*"
-         );
     },[code])
 
     return (
-        <iframe
-            srcDoc={html}
-            ref={iframeRef}
-            sandbox="allow-scripts"
-            title="preview"
-        ></iframe>
+        <div className='preview-wrapper'>
+            <iframe
+                srcDoc={html}
+                ref={iframeRef}
+                sandbox="allow-scripts"
+                title="preview"
+            ></iframe>
+        </div>
     );
 }
 

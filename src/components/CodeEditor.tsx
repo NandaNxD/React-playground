@@ -1,13 +1,13 @@
 import { Editor, Monaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import { useRef } from 'react';
-import * as prettier from "prettier/standalone";
 import parserBabel from "prettier/plugins/babel";
 import prettierPluginEstree from "prettier/plugins/estree";
+import * as prettier from "prettier/standalone";
+import { useRef } from 'react';
 
-import { BundledLanguage, BundledTheme, createHighlighter, HighlighterGeneric } from "shiki";
 import { shikiToMonaco } from "@shikijs/monaco";
-import './CodeEditor.css'
+import { createHighlighter } from "shiki";
+import './CodeEditor.css';
 
 
 export interface CodeEditorProps{
@@ -63,7 +63,7 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
         <div className='editor-wrapper'>
             <button className='button isPrimary is-small' onClick={onFormatClick}>Format</button>
             <Editor
-                height="50vh"
+                height={'100%'}
                 defaultValue={initialValue}
                 defaultLanguage="javascript"
                 theme="vs-dark"

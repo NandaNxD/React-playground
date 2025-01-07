@@ -1,4 +1,5 @@
-export const REACT_TEMPLATE=`import React from "react";
+export const REACT_TEMPLATE=`
+import React from "react";
 import ReactDOM from "react-dom/client";
 
 const App=()=><h2>Hello React</h2>;

@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
-
+import debounce from "lodash.debounce";
 import CodeEditor from "./components/CodeEditor";
 import { REACT_TEMPLATE } from "./templates/REACT_TEMPLATE";
 import { editor } from "monaco-editor";
 import "bulmaswatch/cosmo/bulmaswatch.min.css";
 import Preview from "./components/Preview";
 import bundle from "./bundler";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { DEBOUNCE_TIME_IN_MS } from "./Constants";
+
 
 function App() {
     const [code, setCode] = useState("");
@@ -27,20 +30,33 @@ function App() {
         setCode(transpiledCode || "");
     };
 
-    return (
-        <div>
-            <CodeEditor
-                onChange={(
-                    value: string | undefined,
-                    ev: editor.IModelContentChangedEvent
-                ): void => {
-                    bundleCode(value || "");
-                }}
-                initialValue={REACT_TEMPLATE}
-            ></CodeEditor>
+    const debouncedBundleFunction = useCallback(
+        debounce(bundleCode, DEBOUNCE_TIME_IN_MS),
+        []
+    );
 
-            <Preview code={code}></Preview>
-        </div>
+    return (
+        <PanelGroup  direction="horizontal" style={{height:'100vh'}}>
+            <Panel defaultSize={70}>
+                <CodeEditor
+                    onChange={(
+                        value: string | undefined,
+                        ev: editor.IModelContentChangedEvent
+                    ): void => {
+                        debouncedBundleFunction(value || "");
+                    }}
+                    initialValue={REACT_TEMPLATE}
+                ></CodeEditor>
+            </Panel>
+
+            <PanelResizeHandle className="resize-handle">
+                <div className="resize-image"></div>
+            </PanelResizeHandle>
+
+            <Panel defaultSize={30} >
+                <Preview code={code}></Preview>
+            </Panel>
+        </PanelGroup>
     );
 }
 
