@@ -11,7 +11,7 @@ export const fetchPlugin = (code: string) => {
         setup: (build: esbuild.PluginBuild) => {
             build.onLoad({ filter: /^index\.js$/ }, async () => {
                 return {
-                    loader: "jsx",
+                    loader: "tsx",
                     contents: code,
                 };
             });
@@ -52,7 +52,7 @@ export const fetchPlugin = (code: string) => {
                           
 
                   const result: esbuild.OnLoadResult = {
-                      loader: "jsx",
+                      loader: "tsx",
                       contents: contents,
                       resolveDir: path,
                   };
@@ -75,7 +75,7 @@ export const fetchPlugin = (code: string) => {
                 
 
                 const result: esbuild.OnLoadResult = {
-                    loader: "jsx",
+                    loader: "tsx",
                     contents: fileText,
                     resolveDir: path,
                 };

@@ -9,6 +9,7 @@ import Preview from "./components/Preview";
 import  { Bundler } from "./bundler";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DEBOUNCE_TIME_IN_MS } from "./Constants";
+import { REACT_TYPESCRIPT_TEMPLATE } from "./templates/REACT_TEMPLATE_TYPESCRIPT";
 
 
 function App() {
@@ -54,7 +55,7 @@ function App() {
                     ): void => {
                         debouncedBundleFunction(value || "");
                     }}
-                    initialValue={REACT_TEMPLATE}
+                    initialValue={REACT_TYPESCRIPT_TEMPLATE}
                 ></CodeEditor>
             </Panel>
 
