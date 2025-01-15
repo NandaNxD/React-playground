@@ -11,18 +11,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@monaco-editor/react": "^4.6.0",
+    "@monaco-editor/react": "^4.7.0-rc.0",
     "@types/prettier": "^2.7.3",
+    "@typescript/ata": "^0.9.7",
     "bulmaswatch": "^0.8.1",
     "esbuild-wasm": "^0.24.2",
     "localforage": "^1.10.0",
     "lodash.debounce": "^4.0.8",
-    "monaco-editor": "^0.52.2",
-    "monaco-jsx-highlighter": "^2.77.77",
+    "monaco-editor": "^0.52.0",
     "prettier": "^3.4.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-resizable-panels": "^2.1.7"
+    "react-resizable-panels": "^2.1.7",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

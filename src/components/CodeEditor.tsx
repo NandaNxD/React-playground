@@ -1,72 +1,65 @@
-import { Editor, Monaco } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
+import { Editor, Monaco } from "@monaco-editor/react";
+import { editor } from "monaco-editor";
 import parserBabel from "prettier/plugins/babel";
 import prettierPluginEstree from "prettier/plugins/estree";
 import * as prettier from "prettier/standalone";
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 
 import { shikiToMonaco } from "@shikijs/monaco";
-import { createHighlighter, getHighlighter } from "shiki";
-import './CodeEditor.css';
-import { REACT_TEMPLATE } from '../templates/REACT_TEMPLATE';
+import { createHighlighter } from "shiki";
+import "./CodeEditor.css";
+import { REACT_TEMPLATE } from "../templates/REACT_TEMPLATE";
+import useStore from "../store/store";
+
+import { loader } from "@monaco-editor/react";
+import { CDN_MONACO_URL } from "../constants/constant";
+
+loader.config({
+    paths: { vs: CDN_MONACO_URL },
+});
 
 
-export interface CodeEditorProps{
-    initialValue:string,
+export interface CodeEditorProps {
+    initialValue: string;
 
-    onChange:(value: string | undefined, ev: editor.IModelContentChangedEvent)=>void;
+    onChange: (
+        value: string | undefined,
+        ev: editor.IModelContentChangedEvent
+    ) => void;
 }
 
-const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
 
+const CodeEditor = ({ onChange, initialValue }: CodeEditorProps) => {
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
-    const [name,setName]=useState('');
-    const [value,setValue]=useState('');
+    const [name, setName] = useState("");
+    const [value, setValue] = useState("");
 
-    const handleEditorDidMount=async (editor: editor.IStandaloneCodeEditor, monaco: Monaco)=>  {
+    const {setMonaco,setEditor}=useStore();
 
-        monaco.languages.register({id:'javascript'});
+    const handleEditorDidMount = async (
+        editor: editor.IStandaloneCodeEditor,
+        monaco: Monaco
+    ) => {
+        monaco.languages.register({ id: "javascript" });
         editorRef.current = editor;
-    }
 
-    const getEditorValue=()=> {
-        return (editorRef.current?.getValue()) || '';
-    }
+        setMonaco(monaco);
+        setEditor(editor);
 
-    const onBeforeMount=async(monaco:Monaco)=>{
+        console.log('Monaco editor did mount')
 
-        const data = await fetch(
-            "https://unpkg.com/@types/react@19.0.0/ts5.0/index.d.ts"
-        );
-        const text = await data.text();
+        enableSelfClosingTags(editor,monaco);
+        shikiSyntaxHighlighting(monaco);
+    };
 
-        const reactDom = await fetch(
-            "https://unpkg.com/@types/react-dom@19.0.0/client.d.ts"
-        );
-        const reactDomText = await reactDom.text();
 
-        monaco.languages.typescript.typescriptDefaults.addExtraLib(
-            text,
-            "file:///node_modules/@types/react/index.d.ts"
-        );
+    const getEditorValue = () => {
+        return editorRef.current?.getValue() || "";
+    };
 
-         monaco.languages.typescript.typescriptDefaults.addExtraLib(
-             reactDomText,
-             "file:///node_modules/@types/react-dom/client.d.ts"
-         );
-
-        // monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        //     "export declare function add(a: number, b: number): number",
-        //     "file:///node_modules/@types/math/index.d.ts"
-        // );
-
-        // const model = monaco.editor.createModel(
-        //     `import {add} from 'math';\nconst x = add(3, 5);\n`,
-        //     "typescript",
-        //     monaco.Uri.parse("file:///main.tsx")
-        // );
-
+    const onBeforeMount = async (monaco: Monaco) => {
+        
 
         monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
             jsx: monaco.languages.typescript.JsxEmit.React,
@@ -74,18 +67,19 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
             reactNamespace: "React",
             allowNonTsExtensions: true,
             allowJs: true,
-            target: monaco.languages.typescript.ScriptTarget.Latest,
-            allowSyntheticDefaultImports:true
+            //moduleResolution: 2,
+
+            allowSyntheticDefaultImports: true,
+            target: monaco.languages.typescript.ScriptTarget.Latest
         });
 
         setValue(REACT_TEMPLATE);
         setName("main.tsx");
 
-        shikiSyntaxHighlighting(monaco);
+        
     }
 
-    const shikiSyntaxHighlighting=async (monaco:Monaco)=>{
-
+    const shikiSyntaxHighlighting = async (monaco: Monaco) => {
         void (async () => {
             const ADDITIONAL_LANGUAGES = ["jsx", "tsx", "vue", "svelte"];
 
@@ -100,19 +94,133 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
 
             shikiToMonaco(highlighter, monaco);
         })();
+    };
 
-    }
+    const enableSelfClosingTags = (
+        editor: editor.IStandaloneCodeEditor,
+        monaco: Monaco
+    ) => {
+        editor.onKeyDown((event: any) => {
+            // select enabled languages
+            const enabledLanguages = [
+                "javascript",
+                "typescript",
+            ]; // enable js & ts for jsx & tsx
 
-    const onFormatClick=async()=>{
-        const unformatted=getEditorValue();
-        
-        const formatted=await prettier.format(unformatted, {
+            const model = editor.getModel();
+            
+            if (!enabledLanguages.includes(model!.getLanguageId())) {
+                return;
+            }
+
+            const isSelfClosing = (tag: any) =>
+                [
+                    "area",
+                    "base",
+                    "br",
+                    "col",
+                    "command",
+                    "embed",
+                    "hr",
+                    "img",
+                    "input",
+                    "keygen",
+                    "link",
+                    "meta",
+                    "param",
+                    "source",
+                    "track",
+                    "wbr",
+                    "circle",
+                    "ellipse",
+                    "line",
+                    "path",
+                    "polygon",
+                    "polyline",
+                    "rect",
+                    "stop",
+                    "use",
+                ].includes(tag);
+
+            // when the user enters '>'
+            if (event.browserEvent.key === ">") {
+                const currentSelections = editor.getSelections();
+
+                const edits: any[] = [];
+                const newSelections: any[] = [];
+                // potentially insert the ending tag at each of the selections
+                if (currentSelections)
+                    for (const selection of currentSelections) {
+                        // shift the selection over by one to account for the new character
+                        newSelections.push(
+                            new monaco.Selection(
+                                selection.selectionStartLineNumber,
+                                selection.selectionStartColumn + 1,
+                                selection.endLineNumber,
+                                selection.endColumn + 1
+                            )
+                        );
+                        // grab the content before the cursor
+
+                        const contentBeforeChange = model!.getValueInRange({
+                            startLineNumber: 1,
+                            startColumn: 1,
+                            endLineNumber: selection.endLineNumber,
+                            endColumn: selection.endColumn,
+                        });
+
+                        // if ends with a HTML tag we are currently closing
+                        const match = contentBeforeChange.match(
+                            /<([\w-]+)(?![^>]*\/>)[^>]*$/
+                        );
+                        if (!match) {
+                            continue;
+                        }
+
+                        const [fullMatch, tag] = match;
+
+                        // skip self-closing tags like <br> or <img>
+                        if (
+                            isSelfClosing(tag) ||
+                            fullMatch.trim().endsWith("/")
+                        ) {
+                            continue;
+                        }
+
+                        // add in the closing tag
+                        edits.push({
+                            range: {
+                                startLineNumber: selection.endLineNumber,
+                                startColumn: selection.endColumn + 1, // add 1 to offset for the inserting '>' character
+                                endLineNumber: selection.endLineNumber,
+                                endColumn: selection.endColumn + 1,
+                            },
+                            text: `</${tag}>`,
+                        });
+                    }
+
+                // wait for next tick to avoid it being an invalid operation
+                setTimeout(() => {
+                    editor.executeEdits(
+                        model!.getValue(),
+                        edits,
+                        newSelections
+                    );
+                }, 0);
+            }
+        });
+    };
+
+    const onFormatClick = async () => {
+        const unformatted = getEditorValue();
+
+        const formatted = await prettier.format(unformatted, {
             parser: "babel",
             plugins: [parserBabel, prettierPluginEstree],
         });
 
         editorRef.current?.setValue(formatted)
-        
+
     }
 
     return (
@@ -150,3 +258,5 @@ const CodeEditor = ({onChange,initialValue}:CodeEditorProps) => {
 }
 
 export default CodeEditor
+
+// rm -rf ./node_modules/.vite
