@@ -24,7 +24,6 @@ export class AutomaticTypeAcquisition {
             delegate: {
                 receivedFile: (code: string, path: string) => {
                     // Add code to your runtime at the path...
-                    console.log("Path", path);
                     if (receivedFilesAta) receivedFilesAta(code,'file://'+ path);
                 },
                 started: () => {

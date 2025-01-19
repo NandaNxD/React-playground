@@ -39,7 +39,7 @@ const Preview = ({code,error}:PreviewProps) => {
 
             {error && (
                 <div className="preview-error">
-                    <strong>Compile Error</strong> <div>{error}</div>
+                    <strong>Compile Error</strong> <pre style={{background:'white',fontSize:'small'}}>{error}</pre>
                 </div>
             )}
         </div>

@@ -67,8 +67,7 @@ const CodeEditor = ({ onChange, initialValue }: CodeEditorProps) => {
             reactNamespace: "React",
             allowNonTsExtensions: true,
             allowJs: true,
-            //moduleResolution: 2,
-
+            esModuleInterop:true,
             allowSyntheticDefaultImports: true,
             target: monaco.languages.typescript.ScriptTarget.Latest
         });

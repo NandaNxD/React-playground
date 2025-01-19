@@ -9,15 +9,14 @@ import Preview from "./components/Preview";
 import  { Bundler } from "./bundler";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DEBOUNCE_TIME_IN_MS } from "./Constants";
-import { AutomaticTypeAcquisition } from "./automatic-type-acquisition/automaticTypeAcquisition";
 import useStore from "./store/store";
 
 
 function App() {
     const [code, setCode] = useState("");
+
     const [err,setErr]=useState<string | null>('');
-    const [automaticTypeAcquisition, setAutomaticTypeAcquisition]=useState<AutomaticTypeAcquisition | null>(null);
-    const {monaco, editor}=useStore();
+    const {addDependencyLibraryTypesToMonaco}=useStore();
 
     const initializeIframeReactApp = async () => {
       try{
@@ -28,10 +27,6 @@ function App() {
     };
 
     useEffect(() => {
-        setAutomaticTypeAcquisition(new AutomaticTypeAcquisition({
-            receivedFilesAta:onReceivedFiles
-        }));
-
         initializeIframeReactApp();
     }, []);
 
@@ -46,9 +41,7 @@ function App() {
         setErr(null);
         setCode(transpiledCode.code || "");
 
-        console.log(automaticTypeAcquisition);
-
-        automaticTypeAcquisition?.fetchDependencyTypes(code)
+        addDependencyLibraryTypesToMonaco(code);
         
     };
 
@@ -57,16 +50,6 @@ function App() {
         []
     );
 
-    const onReceivedFiles=(file:string, path:string)=>{
-        if(monaco){
-            console.log("Received files");
-            monaco.languages.typescript.typescriptDefaults.addExtraLib(
-                file,
-                path
-            );
-            editor?.focus();
-        }
-    }
 
     return (
         <PanelGroup  direction="horizontal" style={{height:'100vh'}}>

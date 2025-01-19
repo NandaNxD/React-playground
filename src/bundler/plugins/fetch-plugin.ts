@@ -31,10 +31,8 @@ export const fetchPlugin = (code: string) => {
 
                   const data = await fetch(args.path);
                   const fileText = await data.text();
-                  console.log(fileText);
 
                   const path = new URL("./", data.url).pathname;
-                  console.log(path);
 
             
                   const escapedCss = fileText
@@ -63,15 +61,11 @@ export const fetchPlugin = (code: string) => {
             });
 
             build.onLoad({ filter: /.*/ }, async (args: any) => {
-                console.log("onLoad", args);
 
                 const data = await fetch(args.path);
-                const fileText = await data.text();
-                console.log(fileText);
+                const fileText = await data.text(); 
 
                 const path = new URL("./", data.url).pathname;
-                console.log(path);
-
                 
 
                 const result: esbuild.OnLoadResult = {

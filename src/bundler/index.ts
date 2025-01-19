@@ -33,17 +33,33 @@ export const Bundler = {
                     "process.env.NODE_ENV": '"production"',
                     global: "window",
                 },
+                
             });
-
             return {
                 code: result.outputFiles[0].text,
                 error: null,
             };
-        } catch (err: any) {
-            console.log(err.message);
+        } catch (err:any) {
+            console.log(err.errors);
+            let errorMessage=err.message;
+
+            if(err.errors){
+                const errorObject=err.errors[err.errors.length-1];
+                const formattedErrorMessage = 
+                `✘ [ERROR] ${errorObject.text}
+
+                    ${errorObject.location.file}:${errorObject.location.line}:${errorObject.location.column}:
+                    ${errorObject.location.line} │ ${errorObject.location.lineText}`
+
+
+
+                errorMessage=formattedErrorMessage;
+                
+            }
+            
             return {
                 code: "",
-                error: err.message,
+                error: errorMessage,
             };
         }
     },
