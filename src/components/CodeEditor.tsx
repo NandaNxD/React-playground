@@ -3,7 +3,7 @@ import { editor } from "monaco-editor";
 import parserBabel from "prettier/plugins/babel";
 import prettierPluginEstree from "prettier/plugins/estree";
 import * as prettier from "prettier/standalone";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { shikiToMonaco } from "@shikijs/monaco";
 import { createHighlighter } from "shiki";
@@ -34,8 +34,22 @@ const CodeEditor = ({ onChange, initialValue }: CodeEditorProps) => {
 
     const [name, setName] = useState("");
     const [value, setValue] = useState("");
+    const [language, setLanguage] = useState("");
+    
 
-    const {setMonaco,setEditor}=useStore();
+    const {setMonaco,setEditor,fileNodes,selectedFileNodeKey}=useStore();
+
+    useEffect(()=>{
+
+        const selectedFile = fileNodes.filter((node) => {
+            return node.key === selectedFileNodeKey;
+        })[0];
+
+        setValue(selectedFile.fileData?.value!);
+        setName(selectedFile.fileData?.name!);
+        setLanguage(selectedFile.fileData?.language!);
+        
+    },[selectedFileNodeKey]);
 
     const handleEditorDidMount = async (
         editor: editor.IStandaloneCodeEditor,
@@ -72,10 +86,14 @@ const CodeEditor = ({ onChange, initialValue }: CodeEditorProps) => {
             target: monaco.languages.typescript.ScriptTarget.Latest
         });
 
-        setValue(REACT_TEMPLATE);
-        setName("main.tsx");
+        const selectedFile=fileNodes.filter((node)=>{
+            return node.key===selectedFileNodeKey;
+        })[0]
 
-        
+        setValue(selectedFile.fileData?.value!);
+        setName(selectedFile.fileData?.name!);
+        setLanguage(selectedFile.fileData?.language!);
+
     }
 
     const shikiSyntaxHighlighting = async (monaco: Monaco) => {
@@ -246,7 +264,7 @@ const CodeEditor = ({ onChange, initialValue }: CodeEditorProps) => {
                 }}
                 onMount={handleEditorDidMount}
                 beforeMount={onBeforeMount}
-                language={"typescript"}
+                language={language}
 
                 value={value}
                 path={name}

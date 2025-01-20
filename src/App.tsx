@@ -10,6 +10,9 @@ import  { Bundler } from "./bundler";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DEBOUNCE_TIME_IN_MS } from "./Constants";
 import useStore from "./store/store";
+import { FileTree } from "./components/FileTree";
+import Header from "./components/Header";
+
 
 
 function App() {
@@ -17,6 +20,7 @@ function App() {
 
     const [err,setErr]=useState<string | null>('');
     const {addDependencyLibraryTypesToMonaco}=useStore();
+
 
     const initializeIframeReactApp = async () => {
       try{
@@ -50,29 +54,47 @@ function App() {
         []
     );
 
+    const items = [
+        { label: "Dashboard", icon: "pi pi-home" },
+        { label: "Transactions", icon: "pi pi-chart-line" },
+        { label: "Products", icon: "pi pi-list" },
+        { label: "Messages", icon: "pi pi-inbox" },
+    ];
+
 
     return (
-        <PanelGroup  direction="horizontal" style={{height:'100vh'}}>
-            <Panel defaultSize={70}>
-                <CodeEditor
-                    onChange={(
-                        value: string | undefined,
-                        ev: editor.IModelContentChangedEvent
-                    ): void => {
-                        debouncedBundleFunction(value || "");
-                    }}
-                    initialValue={REACT_TEMPLATE}
-                ></CodeEditor>
-            </Panel>
+        <>
+            <Header></Header>
+            <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
+                {/* <Panel defaultSize={15}>
+                    <FileTree></FileTree>
+                </Panel> */}
 
-            <PanelResizeHandle className="resize-handle">
-                <div className="resize-image"></div>
-            </PanelResizeHandle>
+                {/* <PanelResizeHandle className="resize-handle">
+                    <div className="resize-image"></div>
+                </PanelResizeHandle> */}
 
-            <Panel defaultSize={30} >
-                <Preview code={code} error={err}></Preview>
-            </Panel>
-        </PanelGroup>
+                <Panel defaultSize={70}>
+                    <CodeEditor
+                        onChange={(
+                            value: string | undefined,
+                            ev: editor.IModelContentChangedEvent
+                        ): void => {
+                            debouncedBundleFunction(value || "");
+                        }}
+                        initialValue={REACT_TEMPLATE}
+                    ></CodeEditor>
+                </Panel>
+
+                <PanelResizeHandle className="resize-handle">
+                    <div className="resize-image"></div>
+                </PanelResizeHandle>
+
+                <Panel defaultSize={30}>
+                    <Preview code={code} error={err}></Preview>
+                </Panel>
+            </PanelGroup>
+        </>
     );
 }
 

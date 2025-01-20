@@ -16,16 +16,16 @@ export const fetchPlugin = (code: string) => {
                 };
             });
 
-             build.onLoad({ filter: /.*/ }, async (args: any) => {
-                 const cachedResults =
-                     await fileCache.getItem<esbuild.OnLoadResult>(args.path);
+            build.onLoad({ filter: /.*/ }, async (args: any) => {
+                const cachedResults =
+                    await fileCache.getItem<esbuild.OnLoadResult>(args.path);
 
-                 if (cachedResults) {
-                     return cachedResults;
-                 }
+                if (cachedResults) {
+                    return cachedResults;
+                }
 
-                return null;
-             });
+            return null;
+            });
 
             build.onLoad({ filter: /.css$/ }, async (args:any) => {
 

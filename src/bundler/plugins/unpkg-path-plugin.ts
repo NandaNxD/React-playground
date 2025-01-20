@@ -25,7 +25,6 @@ export const unpkgPathPlugin = () => {
                     namespace: 'a',
                 };
                 
-                
             });
 
         },

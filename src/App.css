@@ -1,12 +1,15 @@
 .resize-handle{
-    width: 8px;
+    width: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid #ece7e7;
 }
 
 .resize-image{
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
     height: 60px;
-    width: 100%;
+    width: 80%;
+    background-color: rgb(133, 132, 132);
+    border-radius: 8px;
+    padding: 2px;
 }
