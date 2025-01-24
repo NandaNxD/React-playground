@@ -5,4 +5,4 @@ A React Playground built with Monaco editor, featuring Live Preview of react com
  1. Extremely fast live preview using ES Build Web Assembly on browser 🚀
  2. npm libraries support 🌐
  3. Intellisense for external libs (Intelligent Autocomplete)
-Built using React.js, Zustand, Monaco, ES Build WASM, Pretter, Babel
+## Built using React.js, Zustand, Monaco, ES Build WASM, Pretter, Babel
