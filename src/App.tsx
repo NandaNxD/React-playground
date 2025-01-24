@@ -3,14 +3,12 @@ import "./App.css";
 import debounce from "lodash.debounce";
 import CodeEditor from "./components/CodeEditor";
 import { REACT_TEMPLATE } from "./templates/REACT_TEMPLATE";
-import { editor } from "monaco-editor";
 import "bulmaswatch/cosmo/bulmaswatch.min.css";
 import Preview from "./components/Preview";
 import  { Bundler } from "./bundler";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DEBOUNCE_TIME_IN_MS } from "./Constants";
 import useStore from "./store/store";
-import { FileTree } from "./components/FileTree";
 import Header from "./components/Header";
 
 
@@ -54,13 +52,6 @@ function App() {
         []
     );
 
-    const items = [
-        { label: "Dashboard", icon: "pi pi-home" },
-        { label: "Transactions", icon: "pi pi-chart-line" },
-        { label: "Products", icon: "pi pi-list" },
-        { label: "Messages", icon: "pi pi-inbox" },
-    ];
-
 
     return (
         <>
@@ -78,7 +69,6 @@ function App() {
                     <CodeEditor
                         onChange={(
                             value: string | undefined,
-                            ev: editor.IModelContentChangedEvent
                         ): void => {
                             debouncedBundleFunction(value || "");
                         }}

@@ -18,7 +18,7 @@ const Header = () => {
                 </div>
                 <span
                     className="pi pi-fw pi-question-circle cursor-pointer text-xl"
-                    onClick={(e) => setQuestionDialogVisible(true)}
+                    onClick={() => setQuestionDialogVisible(true)}
                 ></span>
             </div>
 

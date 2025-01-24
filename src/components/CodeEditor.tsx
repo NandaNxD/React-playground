@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { shikiToMonaco } from "@shikijs/monaco";
 import { createHighlighter } from "shiki";
 import "./CodeEditor.css";
-import { REACT_TEMPLATE } from "../templates/REACT_TEMPLATE";
 import useStore from "../store/store";
 
 import { loader } from "@monaco-editor/react";
@@ -29,7 +28,7 @@ export interface CodeEditorProps {
 }
 
 
-const CodeEditor = ({ onChange, initialValue }: CodeEditorProps) => {
+const CodeEditor = ({ onChange }: CodeEditorProps) => {
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
     const [name, setName] = useState("");

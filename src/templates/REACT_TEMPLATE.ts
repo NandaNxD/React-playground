@@ -1,5 +1,4 @@
-export const REACT_TEMPLATE = 
-`
+export const REACT_TEMPLATE = `
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -12,12 +11,17 @@ const App = () => {
         alignItems: "center",
         fontSize: "1.5rem",
         fontFamily: "monospace",
-        gap:'20px'
+        gap: "20px",
       }}
     >
       <span>Playground</span>
       <img
-        src="https://dianapps.com/blog/wp-content/uploads/2022/12/1080600.png"
+        src="https://www.techvoot.com/storage/blogs/meta-image/768794_Animate-3D-Model-Using-Three-META.jpg"
+        style={{ width: "100%", height: "300px", borderRadius: "8px" }}
+        alt="three-js-image"
+      ></img>
+      <img
+        src="https://cdn.mos.cms.futurecdn.net/TevcTWBs4w9qSeAJyRw2RA-1200-80.jpg"
         style={{ width: "100%", height: "300px", borderRadius: "8px" }}
         alt="uber-image"
       ></img>
@@ -30,5 +34,6 @@ root.render(
     <App />
   </React.StrictMode>,
 );
+
 
 `;
