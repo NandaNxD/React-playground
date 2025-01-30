@@ -6,7 +6,7 @@ import { PrimeReactProvider } from "primereact/api";
 import "primeicons/primeicons.css";
 import Clarity from "@microsoft/clarity";
 
-const projectId = "yq1ser45ryn";
+const projectId = "q1ser45ryn";
 
 Clarity.init(projectId);
 
