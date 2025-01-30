@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@microsoft/clarity": "^1.0.0",
     "@monaco-editor/react": "^4.7.0-rc.0",
     "@types/prettier": "^2.7.3",
     "@typescript/ata": "^0.9.7",
