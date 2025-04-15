@@ -16,7 +16,7 @@ const App = () => {
     >
       <span>Playground</span>
       <img
-        src="https://www.techvoot.com/storage/blogs/meta-image/768794_Animate-3D-Model-Using-Three-META.jpg"
+        src="https://cdn.freebiesupply.com/logos/large/2x/react-1-logo-black-and-white.png"
         style={{ width: "100%", height: "300px", borderRadius: "8px" }}
         alt="three-js-image"
       ></img>
