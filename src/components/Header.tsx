@@ -16,10 +16,11 @@ const Header = () => {
                     />
                     <span>React Playground</span>
                 </div>
-                <span
+
+                {/* <span
                     className="pi pi-fw pi-question-circle cursor-pointer text-xl"
                     onClick={() => setQuestionDialogVisible(true)}
-                ></span>
+                ></span> */}
             </div>
 
             <Dialog

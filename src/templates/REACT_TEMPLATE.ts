@@ -1,33 +1,59 @@
 export const REACT_TEMPLATE = `
 import React from "react";
 import ReactDOM from "react-dom/client";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Radar } from "react-chartjs-2";
 
-const App = () => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        fontSize: "1.5rem",
-        fontFamily: "monospace",
-        gap: "20px",
-      }}
-    >
-      <span>Playground</span>
-      <img
-        src="https://cdn.freebiesupply.com/logos/large/2x/react-1-logo-black-and-white.png"
-        style={{ width: "100%", height: "300px", borderRadius: "8px" }}
-        alt="three-js-image"
-      ></img>
-      <img
-        src="https://cdn.mos.cms.futurecdn.net/TevcTWBs4w9qSeAJyRw2RA-1200-80.jpg"
-        style={{ width: "100%", height: "300px", borderRadius: "8px" }}
-        alt="uber-image"
-      ></img>
-    </div>
-  );
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+);
+
+export const data = {
+  labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4", "Thing 5", "Thing 6"],
+  datasets: [
+    {
+      label: "# of Votes",
+      data: [2, 9, 3, 5, 2, 3],
+      backgroundColor: "rgba(255, 99, 132, 0.2)",
+      borderColor: "rgba(255, 99, 132, 1)",
+      borderWidth: 1,
+    },
+  ],
 };
+
+export function App() {
+  return (
+    <React.Fragment>
+      <h3
+        style={{
+          textAlign: "center",
+          fontFamily: "monospace",
+          fontSize: "x-large",
+          borderBottom: "4px solid rgb(254 100 132)",
+          padding:'16px',
+          borderRadius:'2px'
+        }}
+      >
+        Playground
+      </h3>
+      <Radar data={data} />;
+    </React.Fragment>
+  );
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
