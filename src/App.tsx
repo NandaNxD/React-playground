@@ -14,7 +14,7 @@ import Header from "./components/Header";
 
 
 function App() {
-    const [code, setCode] = useState("");
+    const [code, setCode] = useState('');
 
     const [err,setErr]=useState<string | null>('');
     const {addDependencyLibraryTypesToMonaco}=useStore();
@@ -57,13 +57,6 @@ function App() {
         <>
             <Header></Header>
             <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
-                {/* <Panel defaultSize={15}>
-                    <FileTree></FileTree>
-                </Panel> */}
-
-                {/* <PanelResizeHandle className="resize-handle">
-                    <div className="resize-image"></div>
-                </PanelResizeHandle> */}
 
                 <Panel defaultSize={70}>
                     <CodeEditor
