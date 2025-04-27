@@ -77,6 +77,7 @@ const CodeEditor = ({ onChange }: CodeEditorProps) => {
         monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
             jsx: monaco.languages.typescript.JsxEmit.React,
             jsxFactory: "React.createElement",
+            jsxFragmentFactory:"React.Fragment",
             reactNamespace: "React",
             allowNonTsExtensions: true,
             allowJs: true,
