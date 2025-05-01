@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
+import './styles.css'
 
 ChartJS.register(
   RadialLinearScale,
@@ -37,16 +38,7 @@ export const data = {
 export function App() {
   return (
     <React.Fragment>
-      <h3
-        style={{
-          textAlign: "center",
-          fontFamily: "monospace",
-          fontSize: "x-large",
-          borderBottom: "4px solid rgb(254 100 132)",
-          padding:'16px',
-          borderRadius:'2px'
-        }}
-      >
+      <h3 className='header-text'>
         Playground
       </h3>
       <Radar data={data} />;

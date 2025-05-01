@@ -1,6 +1,7 @@
 export const REACT_TEMPLATE = `
 import React from "react";
 import ReactDOM from "react-dom/client";
+import './styles.css'
 
 export function App() {
   return (

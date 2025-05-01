@@ -51,13 +51,16 @@ export const FileTree=()=> {
 
     return (
         <>
-            <Toast ref={toast} />
-            <div className="card flex justify-content-center h-full">
+            <div
+                className="flex justify-content-center h-full bg-[#1e1e1e]"
+            >
                 <Tree
                     value={fileNodes}
                     selectionMode="single"
                     selectionKeys={selectedFileNodeKey}
-                    onSelectionChange={(e) => setSelectedNodeKey(e.value as string)}
+                    onSelectionChange={(e) =>
+                        setSelectedNodeKey(e.value as string)
+                    }
                     onExpand={onExpand}
                     onCollapse={onCollapse}
                     onSelect={onSelect}

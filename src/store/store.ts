@@ -4,13 +4,14 @@ import { create } from "zustand";
 import { AutomaticTypeAcquisition } from "../automatic-type-acquisition/automaticTypeAcquisition";
 import { REACT_TEMPLATE } from "../templates/REACT_TEMPLATE";
 import { STYLES_CSS_TEMPLATE } from "../templates/STYLES_CSS_TEMPLATE";
+import { REACT_CHART_JS_TEMPLATE } from "../templates/REACT_CHARTJS_TEMPLATE";
 
-export interface Node {
+export interface FileNode {
     key: string;
     label: string;
     data?: any; // optional data property to hold any data
     icon?: string; // optional icon property for node
-    children?: Node[]; // optional children property to hold child nodes
+    children?: FileNode[]; // optional children property to hold child nodes
     isDirectory: boolean;
     fileData?: {
         name: string;
@@ -27,9 +28,11 @@ type Store = {
     automaticTypeAcquisiton: AutomaticTypeAcquisition;
     addDependencyLibraryTypesToMonaco: (code: string) => void;
 
-    fileNodes: Node[];
+    fileNodes: FileNode[];
     selectedFileNodeKey: string;
     setSelectedFileNodeKey: (key:string)=>void;
+    setFileData: (fileName: string,code:string)=>void;
+
 };
 
 
@@ -86,7 +89,7 @@ const useStore = create<Store>()((set) => ({
             isDirectory: false,
             fileData: {
                 name: "App.tsx",
-                value: REACT_TEMPLATE,
+                value: REACT_CHART_JS_TEMPLATE,
                 language: "typescript",
             },
         },
@@ -102,26 +105,43 @@ const useStore = create<Store>()((set) => ({
                 language: "css",
             },
         },
-        {
-            key: "main.tsx",
-            label: "main.tsx",
-            data: "main.tsx",
-            icon: "pi pi-fw pi-file",
-            isDirectory: false,
-            fileData: {
-                name: "App.tsx",
-                value: REACT_TEMPLATE,
-                language: "typescript",
-            },
-        },
     ],
-    selectedFileNodeKey:'App.tsx',
-    setSelectedFileNodeKey: (key:string)=>(set((state)=>{
-        return {
-            ...state,
-            selectedFileNodeKey:key
-        }
-    }))
+    selectedFileNodeKey: "App.tsx",
+    setSelectedFileNodeKey: (key: string) =>
+        set((state) => {
+            return {
+                ...state,
+                selectedFileNodeKey: key,
+            };
+        }),
+
+    setFileData: (fileName: string, code: string) =>
+        set((state) => {
+            const fileIndex = state.fileNodes.findIndex(
+                (file) => file.fileData?.name === fileName
+            );
+
+            if (fileIndex === -1) {
+                console.warn(`File ${fileName} not found`);
+                return {}; // No changes
+            }
+
+            const file = { ...state.fileNodes[fileIndex] };
+
+            if (file.fileData) {
+                file.fileData = { ...file.fileData, value: code };
+            }
+
+            const newFileNodes = [
+                ...state.fileNodes.slice(0, fileIndex),
+                file,
+                ...state.fileNodes.slice(fileIndex + 1),
+            ];
+
+            return {
+                fileNodes: newFileNodes,
+            };
+        }),
 }));
 
 

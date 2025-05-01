@@ -39,7 +39,6 @@ const CodeEditor = ({ onChange }: CodeEditorProps) => {
     const {setMonaco,setEditor,fileNodes,selectedFileNodeKey}=useStore();
 
     useEffect(()=>{
-
         const selectedFile = fileNodes.filter((node) => {
             return node.key === selectedFileNodeKey;
         })[0];
@@ -72,8 +71,7 @@ const CodeEditor = ({ onChange }: CodeEditorProps) => {
     };
 
     const onBeforeMount = async (monaco: Monaco) => {
-        
-
+    
         monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
             jsx: monaco.languages.typescript.JsxEmit.React,
             jsxFactory: "React.createElement",
@@ -83,7 +81,8 @@ const CodeEditor = ({ onChange }: CodeEditorProps) => {
             allowJs: true,
             esModuleInterop:true,
             allowSyntheticDefaultImports: true,
-            target: monaco.languages.typescript.ScriptTarget.Latest
+            target: monaco.languages.typescript.ScriptTarget.Latest,
+            module:monaco.languages.typescript.ModuleKind.ES2015
         });
 
         const selectedFile=fileNodes.filter((node)=>{

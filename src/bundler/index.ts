@@ -2,6 +2,7 @@ import * as esbuild from "esbuild-wasm";
 
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 import { fetchPlugin } from "./plugins/fetch-plugin";
+import { FileNode } from "../store/store";
 
 export interface BundledCode {
     code: string;
@@ -22,13 +23,13 @@ export const Bundler = {
         this.initialized = true;
     },
 
-    bundleCode: async function (rawCode: string) {
+    bundleCode: async function (rawCode: string,files:FileNode[]) {
         try {
             const result = await esbuild.build({
                 entryPoints: ["index.js"],
                 bundle: true,
                 write: false,
-                plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
+                plugins: [unpkgPathPlugin(), fetchPlugin(rawCode,files)],
                 define: {
                     "process.env.NODE_ENV": '"production"',
                     global: "window",
@@ -50,7 +51,6 @@ export const Bundler = {
 
                     ${errorObject.location.file}:${errorObject.location.line}:${errorObject.location.column}:
                     ${errorObject.location.line} │ ${errorObject.location.lineText}`
-
 
 
                 errorMessage=formattedErrorMessage;

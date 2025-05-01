@@ -10,6 +10,24 @@ export const unpkgPathPlugin = () => {
                 return { path: 'index.js', namespace: "a" };
             });
 
+             // 2) CSS RESOLUTION: split local vs CDN
+            build.onResolve({ filter: /\.css$/ }, (args) => {
+                const isRelative = args.path.startsWith("./") || args.path.startsWith("../");
+
+                if (isRelative) {
+                    // keep it “local”—we’ll pull from your `files` map in onLoad
+                    return {
+                    path: args.path,
+                    namespace: "css-local",
+                    };
+                }
+                // package CSS from unpkg
+                return {
+                    path: `https://unpkg.com/${args.path}`,
+                    namespace: "css-cdn",
+                };
+            });
+
             // handle packages 
             build.onResolve({ filter: /.*/ }, async (args: any) => {
 

@@ -8,8 +8,9 @@ import Preview from "./components/Preview";
 import  { Bundler } from "./bundler";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { DEBOUNCE_TIME_IN_MS } from "./Constants";
-import useStore from "./store/store";
+import useStore, { FileNode } from "./store/store";
 import Header from "./components/Header";
+import { FileTree } from "./components/FileTree";
 
 
 
@@ -17,13 +18,13 @@ function App() {
     const [code, setCode] = useState('');
 
     const [err,setErr]=useState<string | null>('');
-    const {addDependencyLibraryTypesToMonaco}=useStore();
+    const {addDependencyLibraryTypesToMonaco,setFileData,selectedFileNodeKey,fileNodes}=useStore();
 
 
     const initializeIframeReactApp = async () => {
       try{
         await Bundler.initializeBundler()
-        await bundleCode(REACT_TEMPLATE);
+        await bundleCode(REACT_TEMPLATE,fileNodes);
       }
       catch(err){}
     };
@@ -32,8 +33,8 @@ function App() {
         initializeIframeReactApp();
     }, []);
 
-    const bundleCode = async (code: string) => {
-        const transpiledCode = await Bundler.bundleCode(code);
+    const bundleCode = async (code: string,files:FileNode[]) => {
+        const transpiledCode = await Bundler.bundleCode(code,files);
 
         if(transpiledCode.error){
             setErr(transpiledCode.error);
@@ -53,17 +54,28 @@ function App() {
     );
 
 
+    useEffect(()=>{
+        debouncedBundleFunction(fileNodes.find((file)=>file.key==='App.tsx')?.fileData?.value!,fileNodes);
+    },[fileNodes])
+
+
     return (
         <>
             <Header></Header>
             <PanelGroup direction="horizontal" style={{ height: "100vh" }}>
+                <Panel defaultSize={15}>
+                    <FileTree></FileTree>
+                </Panel>
 
-                <Panel defaultSize={70}>
+                <PanelResizeHandle className="resize-handle">
+                    <div className="resize-image"></div>
+                </PanelResizeHandle>
+
+                <Panel defaultSize={55}>
                     <CodeEditor
-                        onChange={(
-                            value: string | undefined,
-                        ): void => {
-                            debouncedBundleFunction(value || "");
+                        onChange={(value: string | undefined): void => {
+                            setFileData(selectedFileNodeKey,value!);
+                            // debouncedBundleFunction(value || "");
                         }}
                         initialValue={REACT_TEMPLATE}
                     ></CodeEditor>
