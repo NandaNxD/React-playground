@@ -37,13 +37,13 @@ function App() {
     const bundleCode = async (code: string,files:FileNode[]) => {
         const transpiledCode = await Bundler.bundleCode(code,files);
 
-        if(transpiledCode.error){
+        if(transpiledCode?.error){
             setErr(transpiledCode.error);
             return;
         }
 
         setErr(null);
-        setCode(transpiledCode.code || "");
+        setCode(transpiledCode?.code || "");
 
         addDependencyLibraryTypesToMonaco(code);
         

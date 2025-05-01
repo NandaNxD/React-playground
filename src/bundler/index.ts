@@ -24,6 +24,9 @@ export const Bundler = {
     },
 
     bundleCode: async function (rawCode: string,files:FileNode[]) {
+        if(!this.initialized){
+            return;
+        }
         try {
             const result = await esbuild.build({
                 entryPoints: ["index.js"],
