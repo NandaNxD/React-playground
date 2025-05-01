@@ -11,6 +11,7 @@ import { DEBOUNCE_TIME_IN_MS } from "./Constants";
 import useStore, { FileNode } from "./store/store";
 import Header from "./components/Header";
 import { FileTree } from "./components/FileTree";
+import { REACT_CHART_JS_TEMPLATE } from "./templates/REACT_CHARTJS_TEMPLATE";
 
 
 
@@ -24,7 +25,7 @@ function App() {
     const initializeIframeReactApp = async () => {
       try{
         await Bundler.initializeBundler()
-        await bundleCode(REACT_TEMPLATE,fileNodes);
+        await bundleCode(REACT_CHART_JS_TEMPLATE,fileNodes);
       }
       catch(err){}
     };
@@ -77,7 +78,7 @@ function App() {
                             setFileData(selectedFileNodeKey,value!);
                             // debouncedBundleFunction(value || "");
                         }}
-                        initialValue={REACT_TEMPLATE}
+                        initialValue={REACT_CHART_JS_TEMPLATE}
                     ></CodeEditor>
                 </Panel>
 
