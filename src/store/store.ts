@@ -35,34 +35,25 @@ type Store = {
 
 };
 
-
-
-const onReceivedFiles = (file: string, path: string) => {
-    
-    if ((window as any)["monaco"]) {
-      
-        if (!path.includes('@types')){
-            path=path.replace("file:///node_modules", "file:///node_modules/@types");
-        }
-            (window as any)[
-                "monaco"
-            ].languages.typescript.typescriptDefaults.addExtraLib(file, path);
-    }
-};
-
-
-const useStore = create<Store>()((set) => ({
+const useStore = create<Store>()((set, get) => ({
     monaco: null,
 
     automaticTypeAcquisiton: new AutomaticTypeAcquisition({
-        receivedFilesAta: onReceivedFiles,
+        receivedFilesAta: (file: string, path: string) => {
+            const monaco = get().monaco;
+            if (monaco) {
+                if (!path.includes('@types')){
+                    path=path.replace("file:///node_modules", "file:///node_modules/@types");
+                }
+                monaco.languages.typescript.typescriptDefaults.addExtraLib(file, path);
+            }
+        },
     }),
 
     editor: null,
 
     setMonaco: (monaco: Monaco) =>
         set((state) => {
-            (window as any)["monaco"] = monaco;
             return { ...state, monaco: monaco };
         }),
 
